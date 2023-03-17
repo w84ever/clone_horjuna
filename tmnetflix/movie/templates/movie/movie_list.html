@@ -1,111 +1,54 @@
-{% load static %}
+{% extends 'base.html' %}
+{% block body %}
+		<main class="content">
+			<section class="centered">
+                {% if movie_category %}
+                    <h3>{{movie_category|title}} Movies</h3>
+                {% endif %}
+               
+                {% if movie_language %}
+                    <h3>{{movie_language|title}} Movies</h3>
+                {% endif %}
 
-<!DOCTYPE html>
-<html lang="ru">
-    <head>
-        <meta charset="utf-8">
-	    <title>Фильмы</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+				<div class="movies">
+                    {% for movie in object_list %}
+                        <div class="mov">
+                            <a href="{% url 'movies:movie_detail' movie.slug %}">
+                                <img src="{{movie.poster.url}}">
+                                <h2 class="movietitle">{{movie.title}}</h2>
+                            </a>
+                        </div>
+                    {% empty %}
+                        <h3>There Are No Movies In This Category</h3>
+                    {% endfor %}
 
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg bg-dark">
-            <div class="container-fluid">
-              <a class="navbar-brand" href="#" style="width: 100px; margin-left: 200px;">Logo</a>
-              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <div class="collapse navbar-collapse" id="navbarNavAltMarkup" style=>
-                <div class="navbar-nav">
-                  <a class="nav-link active" aria-current="page" href="#" style="margin-right: 20px; color: white;">Главная</a>
-                  <a class="nav-link active" href="#" style="color: white;">Фильмы</a>
                 </div>
-                <div class="d-flex align-items-center justify-content-center" style="margin-left: 900px;">
-                  <form class="d-flex">
-                    <input class="form-control me-1" type="search" placeholder="Введите фильм..." aria-label="Search">
-                    <button class="btn btn-success" type="submit">Найти</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </nav>
-        <div>
-        <input type="checkbox" id="toggle"></input>
-        <aside class="leftbar">
-            <label for='toggle' class='exit'>X</label>
-            <div class="d-flex align-items-center justify-content-center" style="margin-top:200px;">
-              <form class="d-flex">
-                <input class="form-control me-1" type="search" placeholder="Введите фильм..." aria-label="Search">
-                <button class="btn btn-success" type="submit">Найти</button>
-              </form>
-            </div>
-            <div class="container">
-                <div class="row align-items-start" style="height: 40px; color: white;">
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="ActionCheckBox">
-                    <label class="form-check-label" for="ActionCheckBox">
-                        Экшен
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="ThrillerCheckBox">
-                    <label class="form-check-label" for="ThrillerCheckBox">
-                        Триллер
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="ComedyCheckBox">
-                    <label class="form-check-label" for="ComedyCheckBox">
-                        Комедия
-                    </label>
-                  </div>
-                </div>
-                <div class="row align-items-center" style="color: white;">
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="DramaCheckBox">
-                    <label class="form-check-label" for="DramaCheckBox">
-                        Драма
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="RomanceCheckBox">
-                    <label class="form-check-label" for="RomanceCheckBox">
-                        Романтика
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="FantasyCheckBox">
-                    <label class="form-check-label" for="FantasyCheckBox">
-                        Фантастика
-                    </label>
-                  </div>
-                </div>
-                <div class="row align-items-end" style="height: 40px; color: white;">
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="EroticaCheckBox">
-                    <label class="form-check-label" for="EroticaCheckBox">
-                        Эротика
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="WesternCheckBox">
-                    <label class="form-check-label" for="WesternCheckBox">
-                        Вестерн
-                    </label>
-                  </div>
-                  <div class="col">
-                    <input class="form-check-input" type="checkbox" value="" id="AdventureCheckBox">
-                    <label class="form-check-label" for="AdventureCheckBox">
-                        Приключение
-                    </label>
-                  </div>
-                </div>
-              </div>
-        </aside>
-        <label for='toggle' class='button'>=</label>
-        </div>
-    </body>
-</html>
+                {% if is_paginated %}
+                    <nav class="pagination">
+                        <ul>
+                            {% if page_obj.has_previous %}
+                                <li><a href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+                            {% else %}
+                                <li class="disabled"></li>
+                            {% endif %}
+                            
+                            {% for pages in page_obj.paginator.page_range %}
+                              {% if page_obj.number == pages %}
+                                <li><a href="#">{{pages}}</a></li>
+                              {% else %}
+                                <li><a href="?page={{pages}}">{{pages}}</a></li>
+                              {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                            {% else %}
+                                <li class="disabled"></li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                {% endif %}
+			</section>
+
+		</main>
+{% endblock body %}

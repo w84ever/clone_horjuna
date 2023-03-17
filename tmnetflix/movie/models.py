@@ -1,5 +1,7 @@
 from django.db import models
-
+from django.urls import reverse
+from django.utils.text import slugify
+from django.utils import timezone
 
 CATEGORY_CHOICES = (
     ('A', 'Экшен'),
@@ -30,5 +32,29 @@ class Movie(models.Model):
     year_of_production = models.DateField()
     views_count = models.IntegerField(default=0)
 
+    created = models.DateTimeField(default=timezone.now)
+
+    slug = models.SlugField(blank=True, null=True)
+    
+    def save(self ,*args ,**kwargs):
+        if not self.slug :
+            self.slug = slugify(self.title)
+        super(Movie , self).save( *args , **kwargs)
+
     def __str__(self) -> str:
         return self.title
+    
+
+class Banner(models.Model):
+    name = models.CharField(max_length=40)
+    photo = models.ImageField(upload_to='image', blank=True)
+
+    def __str__(self) -> str:
+        return self.name
+    
+class MainBanner(models.Model):
+    name = models.CharField(max_length=30)
+    banner = models.ImageField(upload_to='image')
+
+    def __str__(self) -> str:
+        return self.name

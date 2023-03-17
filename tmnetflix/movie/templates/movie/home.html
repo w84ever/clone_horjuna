@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+        <main class="content">
+
+          <div>
+            <input type="checkbox" id="toggle"></input>
+          <label for='toggle' class='button' style="z-index: 1;">=</label>
+              <aside class="leftbar">
+                  <label for='toggle' class='exit'>X</label>
+                  <div class="d-flex align-items-center justify-content-center" style="margin-top:200px;">
+                      <form class="d-flex">
+                      <input class="form-control me-1" type="search" placeholder="Введите фильм..." aria-label="Search">
+                      <button class="btn btn-success" type="submit">Найти</button>
+                      </form>
+                  </div>
+                  <div class="container mt-3">
+                    <form action="">
+                      <div class="row">
+                        <div class="column left" style="margin-top: 30px;">
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check1" name="option1" value="something">
+                            <label class="form-check-label" for="check1">Романтика</label>
+                          </div>
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check2" name="option2" value="something">
+                            <label class="form-check-label" for="check2">Комедия</label>
+                          </div>
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check3" name="option3" value="something">
+                            <label class="form-check-label" for="check3">Драма</label>
+                          </div>
+                        </div>
+                        <div class="column right" style="margin-top: 30px;">
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check4" name="option4" value="something">
+                            <label class="form-check-label" for="check4">Приключение</label>
+                          </div>
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check5" name="option5" value="something">
+                            <label class="form-check-label" for="check5">Ужасы</label>
+                          </div>
+                          <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="check6" name="option6" value="something">
+                            <label class="form-check-label" for="check6">Экшен</label>
+                          </div>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary mt-3" id="left-bar-sumbit">Submit</button>
+              
+                    </form>
+                  </div>
+              </aside>
+        </div>
+      
+        <div class="container-fluid px-0">
+          <div id="myCarousel" class="carousel slide" data-ride="carousel" style="margin-top: -20px; height: 640px;">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+              <li data-target="#myCarousel" data-slide-to="1"></li>
+              <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox" style="width: 100%; height: 640px; !important;">
+              <div class="item active">
+                <img src="{{first_banner.banner.url}}" alt="Главный баннер">
+              </div>
+              {% for banner in slider_banner %}
+              <div class="item">
+                <img src="{{banner.photo.url}}" alt="Баннер" style="width: 100%;">
+              </div>
+              {% endfor %}
+            <!-- Left and right controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+              <span class="glyphicon glyphicon-chevron-left"></span>
+              <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+              <span class="glyphicon glyphicon-chevron-right"></span>
+              <span class="sr-only">Next</span>
+            </a>
+          </div>
+        </div>
+        
+          <section class="panel" style="background-color: rgb(39, 39, 54);">
+            <h2>Недавное</h2>
+            <div class="recentslider">
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                    {% for movie in recently_added %} 
+                      <div class="swiper-slide"><a href="{% url 'movies:movie_detail' movie.slug %}"><img src="{{movie.poster.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                    {% endfor %}
+                    <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+                </div>
+                <div class="nextdirection recent-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+                <div class="leftdirection recent-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+              </div>
+            </div>
+          </section>
+    
+          <section class="panel" style="background-color: rgb(39, 39, 54);">
+            <h2>Популярное</h2>
+            <div class="mostslider">
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  {% for movie in most_watched %} 
+                      <div class="swiper-slide"><a href="{% url 'movies:movie_detail' movie.slug %}"><img src="{{movie.poster.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                  {% endfor %}
+                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div>
+                </div>
+                <div class="nextdirection most-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+                <div class="leftdirection most-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+                <!-- Add Pagination -->
+              </div>
+            </div>
+          </section>
+    
+          <section class="panel" style="background-color: rgb(39, 39, 54);">
+            <h2>Лучшее</h2>
+            <div class="topslider">
+              <div class="swiper-container">
+                <div class="swiper-wrapper">
+                  {% for movie in top_rated %}
+                    <div class="swiper-slide"><a href="{% url 'movies:movie_detail' movie.slug %}"><img src="{{movie.poster.url}}"><h3 class="hometitle">{{movie.title}}</h3></a></div>
+                  {% endfor %}
+                  <div class="swiper-slide"><a href="mostwatched.html"><img src="{% static 'img/others.png' %}"></a></div> 
+                </div>
+                <div class="nextdirection top-next"><img src="{% static 'img/right-arrow.svg' %}"> </div>
+                <div class="leftdirection top-prev"><img src="{% static 'img/left-arrow.svg' %}"> </div>
+                <!-- Add Pagination -->
+              </div>
+            </div>
+          </section>
+    
+          
+        </main>
+
+        {% endblock body %}

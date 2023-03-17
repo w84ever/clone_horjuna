@@ -1,1 +1,39 @@
-<h2>Welcome in Movie Detail</h2>
+{% extends 'base.html' %}
+{% block body %}
+  
+
+		<main class="content">
+			<div class="single">
+
+				<section class="movie">
+					<img src="{{object.poster.url}}">
+					<ul>
+						<li>{{object.title}}</li>
+						<li>{{object.description}}</li>
+						<li><a href="genre.html">Adventure</a>, <a href="genre.html">Drama</a>, <a href="genre.html">Romance</a></li>
+						<li>{{object.views_count}} Views</li>
+					</ul>
+				</section>
+				<section class="links">
+                    <video width="1140" height="430" controls autoplay>
+                    <source src="{{object.video.url}}">
+                    </video>
+				</section>
+
+				<section class="related">
+					<h3>Related movies</h3>
+					
+					{% for movie in related_movies %}
+						<div class="relatemovie">
+							<a href="{% url 'movies:movie_detail' movie.slug %}"><img src="{{movie.poster.url}}"></a>
+							<a href="{% url 'movies:movie_detail' movie.slug %}"><span class="relatedname">{{movie.title}}</span></a>
+						</div>
+					{% endfor %}
+
+				</section>
+
+
+			</div>
+		</main>
+
+{% endblock body %}
